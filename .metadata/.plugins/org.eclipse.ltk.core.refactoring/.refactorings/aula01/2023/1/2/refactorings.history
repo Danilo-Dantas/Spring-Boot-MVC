@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;aula01/src/main/resources/templates/public-index.html&apos; to &apos;publica-index.html&apos;" description="Rename resource &apos;public-index.html&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/templates/public-index.html" name="publica-index.html" stamp="1673529449601" updateReferences="true"/>
+</session>

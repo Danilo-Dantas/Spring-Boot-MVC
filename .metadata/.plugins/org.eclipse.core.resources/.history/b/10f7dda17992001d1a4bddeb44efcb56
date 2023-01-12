@@ -1,0 +1,5 @@
+package com.danilodantas.aula01.controller;
+
+public class HomeController {
+
+}
