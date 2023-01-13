@@ -1,4 +1,4 @@
-package com.danilodantas.aula01.controller;
+package com.danilodantas.aula.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
