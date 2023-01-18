@@ -1,5 +1,7 @@
 package com.danilodantas.aula.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.danilodantas.aula.modelo.Papel;
 import com.danilodantas.aula.modelo.Usuario;
+import com.danilodantas.aula.repository.PapelRepository;
 import com.danilodantas.aula.repository.UsuarioRepository;
 
 @Controller
@@ -23,6 +27,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private PapelRepository papelRepository;
 
 	@GetMapping("/novo")
 	public String adicionarUsuario(Model model) {
@@ -32,22 +39,29 @@ public class UsuarioController {
 	
 	@PostMapping("/salvar")
 	public String salvarUsuario(@Valid Usuario usuario,
-				BindingResult result, 
 				Model model,
+				BindingResult result, 
 				RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			return "/publica-criar-usuario";
 		}	
-		Optional<Usuario> dadosCadastro = usuarioRepository.findByLogin(usuario.getLogin());
-		if (dadosCadastro.isPresent()) {
-			model.addAttribute("alerta", "Esse login já está sendo utilizado por outro usuário.");
-			model.addAttribute("usuario", usuario);
+
+		Usuario usr = usuarioRepository.findByLogin(usuario.getLogin());
+		if (usr != null) {
+			model.addAttribute("loginExiste", "login já existe cadastrado");
 			return "/publica-criar-usuario";
-		} else {
-			usuarioRepository.save(usuario);
-			attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso!");
-			return "redirect:/usuario/novo";
 		}
+		
+		//Busca o papel básico de usuário
+		Papel papel = papelRepository.findByPapel("USER");
+		List<Papel> papeis = new ArrayList<Papel>();
+		papeis.add(papel);
+		usuario.setPapeis(papeis); // associa o papel de USER ao usuário
+		
+		usuarioRepository.save(usuario);
+		attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso!");
+		return "redirect:/usuario/novo";
+		
 	}
 
 	@GetMapping("/admin/listar")
