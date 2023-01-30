@@ -48,7 +48,8 @@
     <fullyQualifiedTypeName name="com.danilodantas.aula.repository.UsuarioRepository"/>
     <fullyQualifiedTypeName name="com.danilodantas.aula.security.DetalheUsuarioServico"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
-    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
     <fullyQualifiedTypeName name="com.danilodantas.aula.security.LoginSucesso"/>
     <fullyQualifiedTypeName name="org.springframework.security.core.annotation.CurrentSecurityContext"/>
+    <fullyQualifiedTypeName name="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 </qualifiedTypeNameHistroy>
