@@ -1,7 +1,6 @@
 package com.danilodantas.aula.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,10 +48,12 @@ public class UsuarioController {
 	    }
 		return false;
 	}
-
+	
 	@GetMapping("/index")
-	public String index(@CurrentSecurityContext(expression = "authentication.name") String login) {
-		Usuario usuario = usuarioRepository.findByLogin(login);	
+	public String index(@CurrentSecurityContext(expression="authentication.name")
+						String login) {
+		
+		Usuario usuario = usuarioRepository.findByLogin(login);
 		
 		String redirectURL = "";
 		if (temAutorizacao(usuario, "ADMIN")) {
@@ -62,9 +63,9 @@ public class UsuarioController {
         } else if (temAutorizacao(usuario, "BIBLIOTECARIO")) {
             redirectURL = "/auth/biblio/biblio-index";
         }		
-       return redirectURL;   
+        return redirectURL;
 	}
-	
+		
 	@GetMapping("/novo")
 	public String adicionarUsuario(Model model) {
 		model.addAttribute("usuario", new Usuario());
@@ -72,38 +73,36 @@ public class UsuarioController {
 	}
 	
 	@PostMapping("/salvar")
-	public String salvarUsuario(@Valid Usuario usuario,
-				BindingResult result, 	
-				Model model,
-				RedirectAttributes attributes) {
+	public String salvarUsuario(@Valid Usuario usuario, BindingResult result, 
+				Model model, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			return "/publica-criar-usuario";
-		}	
+		}
+		
 		Usuario usr = usuarioRepository.findByLogin(usuario.getLogin());
 		if (usr != null) {
-			model.addAttribute("loginExiste", "login já existe cadastrado");
+			model.addAttribute("loginExiste", "Login já existe cadastrado");
 			return "/publica-criar-usuario";
 		}
+		
 		//Busca o papel básico de usuário
 		Papel papel = papelRepository.findByPapel("USER");
 		List<Papel> papeis = new ArrayList<Papel>();
-		papeis.add(papel);
-		usuario.setAtivo(true);
+		papeis.add(papel);				
 		usuario.setPapeis(papeis); // associa o papel de USER ao usuário
 		
-		String senhaCriptografada = criptografia.encode(usuario.getPassword());
-		usuario.setPassword(senhaCriptografada);
+		String senhaCriptografia = criptografia.encode(usuario.getPassword());
+		usuario.setPassword(senhaCriptografia);
 		
 		usuarioRepository.save(usuario);
 		attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso!");
 		return "redirect:/usuario/novo";
-		
 	}
-
-	@GetMapping("/admin/listar")
+	
+	@RequestMapping("/admin/listar")
 	public String listarUsuario(Model model) {
-		model.addAttribute("usuarios", usuarioRepository.findAll());
-		return "/auth/admin/admin-listar-usuario";
+		model.addAttribute("usuarios", usuarioRepository.findAll());		
+		return "/auth/admin/admin-listar-usuario";		
 	}
 	
 	@GetMapping("/admin/apagar/{id}")
@@ -134,50 +133,50 @@ public class UsuarioController {
 	    }
 	    usuarioRepository.save(usuario);
 	    return "redirect:/usuario/admin/listar";
-	}	
-
+	}
+		
 	@GetMapping("/editarPapel/{id}")
-	public String selecionarPapel(@PathVariable("id") Long id, Model model) {
+	public String selecionarPapel(@PathVariable("id") long id, Model model) {
 		Optional<Usuario> usuarioVelho = usuarioRepository.findById(id);
 		if (!usuarioVelho.isPresent()) {
-			throw new IllegalArgumentException("Usuário inválido: " + id);
-		}
+            throw new IllegalArgumentException("Usuário inválido:" + id);
+        } 
 		Usuario usuario = usuarioVelho.get();
-		model.addAttribute("usuario", usuario);
-		model.addAttribute("listaPapeis", papelRepository.findAll());
-		return "/auth/admin/admin-editar-papel-usuario";
+	    model.addAttribute("usuario", usuario);
+	    
+	    model.addAttribute("listaPapeis", papelRepository.findAll());
+	    
+	    return "/auth/admin/admin-editar-papel-usuario";
 	}
 	
 	@PostMapping("/editarPapel/{id}")
-	public String selecionarPapel(@PathVariable("id") Long idUsuario,
-								  @RequestParam(value = "pps", required = false) int[] pps,
-								  Usuario usuario,
-								  RedirectAttributes attributes) {
+	public String atribuirPapel(@PathVariable("id") long idUsuario, 
+								@RequestParam(value = "pps", required=false) int[] pps, 
+								Usuario usuario, 
+								RedirectAttributes attributes) {
 		if (pps == null) {
 			usuario.setId(idUsuario);
-			attributes.addFlashAttribute("mensagem", "Pelo menos um papel de ser informado");
-			return "redirect:/usuario/editarPapel/" + idUsuario;
+			attributes.addFlashAttribute("mensagem", "Pelo menos um papel deve ser informado");
+			return "redirect:/usuario/editarPapel/"+idUsuario;
 		} else {
 			//Obtém a lista de papéis selecionada pelo usuário do banco
-			List<Papel> papeis = new ArrayList<Papel>();
-			for(int i = 0; i < pps.length; i++) {
+			List<Papel> papeis = new ArrayList<Papel>();			 
+			for (int i = 0; i < pps.length; i++) {
 				long idPapel = pps[i];
 				Optional<Papel> papelOptional = papelRepository.findById(idPapel);
-				if(papelOptional.isPresent()) {
+				if (papelOptional.isPresent()) {
 					Papel papel = papelOptional.get();
 					papeis.add(papel);
-				}
+		        }
 			}
 			Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 			if (usuarioOptional.isPresent()) {
 				Usuario usr = usuarioOptional.get();
+				usr.setPapeis(papeis); // relaciona papéis ao usuário
 				usr.setAtivo(usuario.isAtivo());
-				usr.setPapeis(papeis); // relacionando papéis ao usuário
 				usuarioRepository.save(usr);
-			}
-		}
-		
-		return "redirect:/usuario/admin/listar";
+	        }			
+		}		
+	    return "redirect:/usuario/admin/listar";
 	}
-
 }

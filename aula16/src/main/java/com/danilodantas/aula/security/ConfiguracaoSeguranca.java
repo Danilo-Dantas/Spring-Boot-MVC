@@ -13,14 +13,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.danilodantas.aula.repository.UsuarioRepository;
 
+
+
 @Configuration
 @EnableWebSecurity
 public class ConfiguracaoSeguranca extends WebSecurityConfigurerAdapter {
-
+	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	@Autowired
+	@Autowired 
 	private LoginSucesso loginSucesso;
 	
 	@Bean
@@ -28,15 +30,15 @@ public class ConfiguracaoSeguranca extends WebSecurityConfigurerAdapter {
 		BCryptPasswordEncoder criptografia = new BCryptPasswordEncoder();
 		return criptografia;
 	}
-
+	
 	@Override
 	public UserDetailsService userDetailsServiceBean() throws Exception {
-		DetalheUsuarioServico detalheUsuarioServico = new DetalheUsuarioServico(usuarioRepository);
-		return detalheUsuarioServico;
+		DetalheUsuarioServico detalheDoUsuario = new DetalheUsuarioServico(usuarioRepository);
+		return detalheDoUsuario;
 	}
 	
 	@Override
-	protected void configure(HttpSecurity http) throws Exception { 
+	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/").permitAll()
 		.antMatchers("/auth/user/*").hasAnyAuthority("USER","ADMIN","BIBLIOTECARIO")
@@ -62,5 +64,4 @@ public class ConfiguracaoSeguranca extends WebSecurityConfigurerAdapter {
 		
 		auth.userDetailsService(detalheDoUsuario).passwordEncoder(criptografia);
 	}
-
 }

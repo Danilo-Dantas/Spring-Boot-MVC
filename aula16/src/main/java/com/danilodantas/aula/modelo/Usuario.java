@@ -9,11 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.JoinColumn;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -45,19 +45,19 @@ public class Usuario {
 	private String email;
 		
 	@NotEmpty(message = "A senha deve ser informada")
-	@Size(min = 3, max = 12, message = "A senha deve ter entre 3 e 12 caracteres")
+	@Size(min = 3, message = "A senha deve ter no mínimo 3 caracteres")
 	private String password;	
 	
 	@NotEmpty(message = "O login deve ser informado")
 	@Size(min = 4, message = "O login deve ter no mínimo 4 caracteres")
 	private String login;
 	
-	private boolean ativo;	 
+	private boolean ativo;	
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_papel",
-				joinColumns = @JoinColumn(name ="usuario_id"),
-				inverseJoinColumns = @JoinColumn(name = "papel_id"))
+	@JoinTable(name="usuario_papel",
+			   joinColumns = @JoinColumn(name = "usuario_id"),
+			   inverseJoinColumns = @JoinColumn(name = "papel_id"))
 	private List<Papel> papeis;
 	
 	public Long getId() {

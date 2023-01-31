@@ -10,9 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 @Entity
-
 public class Papel {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -21,6 +20,13 @@ public class Papel {
 	
 	@ManyToMany(mappedBy = "papeis", fetch = FetchType.EAGER)
 	private List<Usuario> usuarios;
+	
+	public Papel() {}
+
+	public Papel(String papel) {
+		super();
+		this.papel = papel;
+	}
 
 	public Long getId() {
 		return id;
@@ -28,13 +34,6 @@ public class Papel {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-	
-	public Papel() {}
-
-	public Papel(String papel) {
-		super();
-		this.papel = papel;
 	}
 
 	public String getPapel() {
@@ -44,4 +43,14 @@ public class Papel {
 	public void setPapel(String papel) {
 		this.papel = papel;
 	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+	
+	
 }
