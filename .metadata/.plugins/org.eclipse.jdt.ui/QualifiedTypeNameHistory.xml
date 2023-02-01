@@ -37,7 +37,6 @@
     <fullyQualifiedTypeName name="java.util.Set"/>
     <fullyQualifiedTypeName name="java.util.HashSet"/>
     <fullyQualifiedTypeName name="org.apache.catalina.realm.JNDIRealm.User"/>
-    <fullyQualifiedTypeName name="com.danilodantas.aula.modelo.Papel"/>
     <fullyQualifiedTypeName name="org.springframework.security.core.GrantedAuthority"/>
     <fullyQualifiedTypeName name="org.springframework.security.core.authority.SimpleGrantedAuthority"/>
     <fullyQualifiedTypeName name="org.apache.catalina.User"/>
@@ -52,4 +51,6 @@
     <fullyQualifiedTypeName name="org.springframework.security.core.annotation.CurrentSecurityContext"/>
     <fullyQualifiedTypeName name="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="javax.management.relation.Role"/>
+    <fullyQualifiedTypeName name="com.danilodantas.aula.modelo.Papel"/>
 </qualifiedTypeNameHistroy>
