@@ -53,7 +53,7 @@ public class UsuarioController {
 	public String index(@CurrentSecurityContext(expression = "authentication.name") String login) {
 
 		Usuario usuario = usuarioRepository.findByLogin(login);
-
+		
 		String redirectURL = "";
 		if (temAutorizacao(usuario, "ADMIN")) {
 			redirectURL = "/auth/admin/admin-index";
@@ -65,6 +65,8 @@ public class UsuarioController {
 		return redirectURL;
 	}
 
+	
+	
 	@GetMapping("/novo")
 	public String adicionarUsuario(Model model) {
 		model.addAttribute("usuario", new Usuario());

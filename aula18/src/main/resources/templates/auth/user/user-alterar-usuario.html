@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <script th:src="@{/jquery/jquery.min.js}"></script>
-<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 
 
@@ -17,7 +17,7 @@
 </style>
 </head>
 <body>
-<div th:insert="fragments/publica-nav :: nav"></div>
+<div th:replace="auth/auth-generica-nav :: navGenerica"></div>
 <div class="container">
   <div class="row">  	
     <div class="col">
